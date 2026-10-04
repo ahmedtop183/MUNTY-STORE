@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0759ff">
+<meta name="description" content="MUNTY STORE - شحن الألعاب وبيع وشراء الحسابات">
+<link rel="manifest" href="manifest.json">
+<title>MUNTY STORE</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Tahoma,sans-serif;background:#07152f;color:#fff}
+.app{max-width:760px;margin:auto;min-height:100vh;background:linear-gradient(180deg,#061b45,#07152f)}
+header{position:sticky;top:0;z-index:5;padding:14px 16px;background:rgba(5,20,52,.94);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #17478d}
+.logo{font-weight:900;font-size:22px;color:#fff}.logo span{color:#45a6ff}
+.call{background:#12a85b;color:white;text-decoration:none;padding:9px 13px;border-radius:12px;font-weight:700}
+.hero{padding:12px}.hero img{width:100%;border-radius:18px;display:block;box-shadow:0 10px 30px #0008}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}
+nav button,.paybtn{border:0;border-radius:13px;padding:12px;background:#103875;color:#fff;font-weight:800;cursor:pointer}
+nav button.active{background:#1264ff}
+section{padding:8px 12px 20px}.title{font-size:21px;font-weight:900;margin:8px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.card{background:#0d2b59;border:1px solid #1c4d91;border-radius:16px;padding:14px;box-shadow:0 8px 20px #0003}
+.card b{font-size:19px}.price{margin:8px 0 12px;color:#7ec3ff;font-weight:900}
+.buy{width:100%;border:0;border-radius:11px;padding:10px;background:#0b7cff;color:#fff;font-weight:900}
+.panel{background:#0b234a;border:1px solid #17478d;border-radius:16px;padding:15px;margin:10px 0}
+.pay{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:9px 0;padding:12px;background:#102f5d;border-radius:13px}
+.pay small{display:block;color:#b9d8ff;margin-top:4px}.copy{background:#fff;color:#07152f;border:0;border-radius:9px;padding:8px;font-weight:800}
+input{width:100%;padding:13px;border-radius:11px;border:1px solid #2861a9;background:#061a38;color:#fff;margin:6px 0 10px;font-size:16px}
+.note{color:#bcd7f7;font-size:13px;line-height:1.7}
+footer{text-align:center;color:#9dbce0;padding:20px 10px;border-top:1px solid #17478d}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#fff;color:#07152f;padding:12px 18px;border-radius:12px;font-weight:800;display:none;z-index:20}
+@media(max-width:420px){.grid{grid-template-columns:1fr}.logo{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">MUNTY <span>STORE</span></div><a class="call" href="tel:0901663428">📞 اتصل</a></header>
+<div class="hero"><img src="assets/banner.jpg" alt="MUNTY STORE"></div>
+
+<nav>
+<button id="ffBtn" class="active" onclick="show('ff')">🔥 Free Fire</button>
+<button id="pubgBtn" onclick="show('pubg')">🎯 PUBG</button>
+<button id="payBtn" onclick="show('payment')">💳 الدفع</button>
+</nav>
+
+<section id="content"></section>
+
+<section class="panel">
+<div class="title">📞 التواصل والطلبات</div>
+<p>رقم MUNTY STORE: <b>0901663428</b></p>
+<a class="call" style="display:inline-block" href="tel:0901663428">اتصال مباشر</a>
+</section>
+<footer>MUNTY STORE © 2026 — شحن ألعاب وخدمات إلكترونية</footer>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const ff=[
+["110💎","8,500 SDG"],["220💎","17,000 SDG"],["330💎","25,500 SDG"],["440💎","34,000 SDG"],
+["582💎","42,500 SDG"],["660💎","51,000 SDG"],["770💎","59,500 SDG"],["880💎","68,000 SDG"],
+["990💎","76,500 SDG"],["1166💎","85,500 SDG"],["2420💎","165,000 SDG"]];
+const pubg=[
+["60 UC","8,300 SDG"],["120 UC","16,600 SDG"],["180 UC","24,900 SDG"],["240 UC","33,000 SDG"],
+["325 UC","41,000 SDG"],["660 UC","83,000 SDG"],["1,800 UC","200,000 SDG"],["3,850 UC","380,000 SDG"],["8,100 UC","800,000 SDG"]];
+const content=document.getElementById('content');
+function show(type){
+ document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+ if(type==='ff'){ffBtn.classList.add('active'); list('🔥 عروض شحن فري فاير',ff,'ID اللاعب');}
+ if(type==='pubg'){pubgBtn.classList.add('active'); list('🎯 عروض شحن شدات ببجي',pubg,'ID اللاعب');}
+ if(type==='payment'){payBtn.classList.add('active'); payment();}
+}
+function list(title,items,field){
+ content.innerHTML='<div class="title">'+title+'</div><div class="grid">'+items.map((x,i)=>`
+ <div class="card"><b>${x[0]}</b><div class="price">${x[1]}</div>
+ <button class="buy" onclick="order('${x[0]}','${x[1]}')">اختيار الباقة</button></div>`).join('')+'</div>';
+}
+function order(pkg,price){
+ content.innerHTML=`<div class="title">🛒 طلب ${pkg}</div>
+ <div class="panel"><b>السعر: ${price}</b><p class="note">أدخل ID اللاعب ثم اختر طريقة الدفع. بعد التحويل أرسل الإشعار للمتجر.</p>
+ <input id="player" placeholder="ID اللاعب">
+ <button class="buy" onclick="sendOrder('${pkg}','${price}')">إرسال الطلب عبر واتساب</button></div>
+ <button class="paybtn" onclick="show('ff')">↩ الرجوع للعروض</button>`;
+}
+function sendOrder(pkg,price){
+ const id=document.getElementById('player').value.trim();
+ if(!id){toast('اكتب ID اللاعب أولاً');return}
+ const msg=`طلب من MUNTY STORE%0Aالباقة: ${pkg}%0Aالسعر: ${price}%0AID اللاعب: ${id}`;
+ location.href='https://wa.me/249901663428?text='+msg;
+}
+function payment(){
+ content.innerHTML=`<div class="title">💳 طرق الدفع</div>
+ <div class="panel"><div class="pay"><div><b>ماي كاشي 🇸🇩</b><small>402924602 — موسى ميكائيل</small></div><button class="copy" onclick="copy('402924602')">نسخ</button></div>
+ <div class="pay"><div><b>بنكك 🇸🇩</b><small>5367698 — فاطمه الشريف<br>التعليق: مونتي مقابل خدمه الكترونيه 🛍</small></div><button class="copy" onclick="copy('5367698')">نسخ</button></div>
+ <div class="pay"><div><b>برافو 🇸🇩</b><small>51390744 — موسى ميكائيل</small></div><button class="copy" onclick="copy('51390744')">نسخ</button></div>
+ <p class="note">☑️ أرسل إشعار الدفع والمبلغ المتفق عليه إلى المتجر.</p></div>`;
+}
+function copy(t){navigator.clipboard?.writeText(t);toast('تم نسخ رقم الحساب')}
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',1800)}
+show('ff');
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}\n</script>
+</body>
+</html>
